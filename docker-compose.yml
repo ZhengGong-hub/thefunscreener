@@ -1,0 +1,19 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8033:8033"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - API_KEY=${API_KEY}
+    volumes:
+      - .:/app
+    command: uv run app/api.py

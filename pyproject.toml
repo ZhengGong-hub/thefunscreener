@@ -1,0 +1,55 @@
+[project]
+name = "thefunscreener"
+version = "0.1.0"
+description = "A FastAPI backend for screening stock companies by market cap"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+authors = [
+    {name = "TheFunScreener Team"}
+]
+dependencies = [
+    "fastapi>=0.100.0,<0.110.0",
+    "uvicorn>=0.23.0,<0.30.0",
+    "pydantic>=2.0.0,<3.0.0",
+    "pydantic-settings>=2.0.0,<3.0.0",
+    "psycopg2-binary>=2.9.6,<3.0.0",
+    "requests>=2.31.0,<3.0.0",
+    "python-dotenv>=1.0.0,<2.0.0",
+    "pandas>=2.2.3"
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.1.0,<0.2.0",
+    "pytest>=7.0.0,<8.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app", "database"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+# Enable flake8-bugbear (`B`) rules.
+select = ["E", "F", "B", "I", "N", "UP", "ANN", "W", "C4", "T20"]
+ignore = ["ANN101", "B008", "E501", "ANN401"]
+
+# Same as Black.
+line-length = 88
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
+
+[tool.ruff.isort]
+known-third-party = ["fastapi", "pydantic", "psycopg2", "requests", "uvicorn"]
+known-first-party = ["app", "database"] 
