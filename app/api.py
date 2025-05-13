@@ -35,5 +35,12 @@ app = server.app
 
 if __name__ == "__main__":
     # Run the server
-    # the change of port and host is done in the api_server.py file
-    server.run()
+    # Parse command line arguments for port
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Run TheFunScreener API server')
+    parser.add_argument('-p', '--port', type=int, default=8033, help='Port to run the server on')
+    args = parser.parse_args()
+    
+    # Pass the port as an argument to the run method
+    server.run(port=args.port)

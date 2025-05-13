@@ -50,6 +50,6 @@ class TheFunScreenerServer:
         """
         self.app.include_router(router)
 
-    def run(self) -> None:
+    def run(self, port: int = 8033) -> None:
         """Run the FastAPI application."""
-        uvicorn.run(self.app, host="0.0.0.0", port=8033, reload=False)
+        uvicorn.run(self.app, host="0.0.0.0", port=port, reload=False)

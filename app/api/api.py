@@ -28,10 +28,23 @@ class TheFunScreenerAPI:
             """Health check endpoint for monitoring."""
             return {"status": "healthy"}
 
-        @self.router.get("/latest-market-cap/{country}/{mktcap_thres}")
+        @self.router.get("/latest-market-cap/{country}/{mktcap}/{top_x}")
         async def get_latest_market_cap(
             country: str,
             mktcap: str,
+            top_x: int | None = None,
             api_key: str = Depends(get_api_key)
         ) -> list[MarketCapEntry]:
-            return self.thefunscreener_service.get_latest_market_cap(country, mktcap)
+            return self.thefunscreener_service.get_latest_market_cap(country, mktcap, top_x)
+
+        @self.router.get("/historical-market-cap/{country}/{mktcap}/{year}/{month}/{top_x}")
+        async def get_historical_market_cap(
+            country: str,
+            mktcap: str,
+            year: int,
+            month: int,
+            top_x: int | None = None,
+            api_key: str = Depends(get_api_key)
+        ) -> list[MarketCapEntry]:
+            return self.thefunscreener_service.get_historical_market_cap(country, mktcap, year, month, top_x)
+        

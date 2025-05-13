@@ -34,7 +34,6 @@ def test_query_global_market_cap_top_x(task_manager):
     
     Ten companies in the world that have a market cap of 1 trillion USD. (including one from Saudi)
     """
-    result = task_manager.query_global_market_cap(asofdate="2025-05-12", mktcap_thres=500e3, country="US", top_x=10)
+    result = task_manager.query_global_market_cap(asofdate="2025-05-12", mktcap_thres=500e3, country="US", allow_fuzzy=True)
     assert result is not None
-    assert len(result) == 10
-    
+    assert len(result) > 20 # becasue of allow fuzzy try to capture for the last x days

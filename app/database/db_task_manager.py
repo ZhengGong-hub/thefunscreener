@@ -23,7 +23,7 @@ class TaskManagerRepository:
         """
         return self.database.query_all("SELECT * from ciqcompany limit 10;")
 
-    def query_global_market_cap(self, asofdate: str, mktcap_thres: float, country: str = "US", allow_fuzzy: bool = False, top_x: int = None) -> pd.DataFrame:
+    def query_global_market_cap(self, asofdate: str, mktcap_thres: float, country: str = "US", allow_fuzzy: bool = False) -> pd.DataFrame:
         """Query the global market cap that is above the threshold and at a given date.
 
         we do not really need the fuzzy, as the marketcap is pretty dense over vacations and holidays
@@ -33,13 +33,12 @@ class TaskManagerRepository:
             mktcap_thres: The market cap threshold (in million USD)
             country: The country code to filter companies (default: "US")
             allow_fuzzy: If True, look for data within 5 days of asofdate if exact date not available
-            top_x: The number of top companies to return
         Returns:
             pd.DataFrame: A dataframe with the company ID and market cap
         """
         # check asofdate is a str
-        if not isinstance(asofdate, str) or not isinstance(top_x, int|None):
-            raise ValueError("asofdate must be a string AND top_x must be an integer")
+        if not isinstance(asofdate, str):
+            raise ValueError("asofdate must be a string")
 
         if country == "Global":
             all_countries = True
@@ -80,7 +79,7 @@ class TaskManagerRepository:
         # Date conditions differ based on allow_fuzzy
         if allow_fuzzy:
             query += f"""
-                ciqmarketcap.pricingdate BETWEEN DATE('{asofdate}') - INTERVAL '5 days' AND '{asofdate}'
+                ciqmarketcap.pricingdate BETWEEN DATE('{asofdate}') - INTERVAL '3 days' AND '{asofdate}'
             """
         else:
             query += f"""
@@ -105,7 +104,7 @@ class TaskManagerRepository:
             AND
                 ciqmarketcap.marketcap / ciqexchangerate.priceclose >= {mktcap_thres}
             AND
-                ciqcompany.companytypeid = 4
+                ciqcompany.companytypeid in (4, 5)
             AND 
                 ciqsecurity.primaryflag = 1
             AND 
@@ -113,11 +112,6 @@ class TaskManagerRepository:
             ORDER BY
                 ciqmarketcap.pricingdate DESC, usdmarketcap DESC
         """
-
-        if top_x is not None:
-            query += f"LIMIT {top_x}"
-        else:
-            pass
 
         res = self.database.query_all(query)
         # convert to dataframe

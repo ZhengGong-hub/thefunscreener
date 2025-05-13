@@ -129,7 +129,6 @@ ruff check .
 
 ## Connect to ciqDB
 psql -h 101.46.32.216 -U qian -d targetdb -p 5432
-"3nhf2f84228cf2f"
 
 ## API Endpoints
 
