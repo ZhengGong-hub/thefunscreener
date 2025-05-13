@@ -20,3 +20,4 @@ class MarketCapEntry(BaseModel):
     tickersymbol: str
     currency: str
     exchange: str
+    country: str

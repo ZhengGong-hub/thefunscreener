@@ -50,5 +50,6 @@ class TheFunScreenerService:
             companyname=row["companyname"],
             tickersymbol=row["tickersymbol"],
             currency=row["currency"],
-            exchange=row["exchange"]
+            exchange=row["exchange"],
+            country=row["country"]
             ) for _, row in res.iterrows()]
