@@ -1,21 +1,16 @@
-import os
 from datetime import datetime
-from typing import Optional
-from fastapi import UploadFile, HTTPException
 from app.database.db_task_manager import TaskManagerRepository
 from app.utils.logging import get_logger
 
 from app.models.marketcap import MarketCapEntry
 
-from pathlib import Path
-import json
 
 logger = get_logger(__name__)
 
 class TheFunScreenerService:
     def __init__(self, task_manager: TaskManagerRepository):
         self.task_manager = task_manager
-        
+
 
     def get_latest_market_cap(self, country: str, mktcap: str) -> list[MarketCapEntry]:
         """
@@ -29,7 +24,7 @@ class TheFunScreenerService:
             list[MarketCapEntry]: A list of market cap entries
         """
 
-        # convert mktcap from caategories to number 
+        # convert mktcap from caategories to number
         if mktcap == "mega":
             mktcap_thres = 200e3 # 200 billion
         elif mktcap == "large":
@@ -39,21 +34,21 @@ class TheFunScreenerService:
         else:
             raise ValueError(f"Invalid market cap category: {mktcap}")
 
-        # get the latest trading date 
-        today = datetime.now().strftime("%Y-%m-%d") 
+        # get the latest trading date
+        today = datetime.now().strftime("%Y-%m-%d")
 
         res = self.task_manager.query_global_market_cap(asofdate=today, mktcap_thres=mktcap_thres, country=country, allow_fuzzy=True)
 
         # keep the most recent marketcap
         res = res.sort_values(by="pricingdate", ascending=False).drop_duplicates(subset="companyid")
-        
+
         return [MarketCapEntry(
-            companyid=row["companyid"], 
-            marketcap=row["marketcap"], 
-            pricingdate=row["pricingdate"].strftime("%Y-%m-%d"), 
-            usdmarketcap=row["usdmarketcap"], 
-            companyname=row["companyname"], 
-            tickersymbol=row["tickersymbol"], 
-            currency=row["currency"], 
+            companyid=row["companyid"],
+            marketcap=row["marketcap"],
+            pricingdate=row["pricingdate"].strftime("%Y-%m-%d"),
+            usdmarketcap=row["usdmarketcap"],
+            companyname=row["companyname"],
+            tickersymbol=row["tickersymbol"],
+            currency=row["currency"],
             exchange=row["exchange"]
             ) for _, row in res.iterrows()]

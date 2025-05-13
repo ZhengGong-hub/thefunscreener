@@ -4,11 +4,7 @@
 from fastapi import (
     APIRouter,
     Depends,
-    BackgroundTasks,
-    UploadFile,
-    File,
 )
-from fastapi.responses import FileResponse
 from app.api.api_service import TheFunScreenerService
 from app.models.marketcap import MarketCapEntry
 from app.api.auth import get_api_key

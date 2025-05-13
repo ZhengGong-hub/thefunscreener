@@ -1,7 +1,5 @@
-from datetime import datetime
-from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class MarketCapEntry(BaseModel):
@@ -14,6 +12,7 @@ class MarketCapEntry(BaseModel):
 3         18749  2016894.630281  2025-05-03   2016894.63           Amazon.com, Inc.         AMZN      USD  NasdaqGS
 4         29096  2000221.070000  2025-05-03   2000221.07              Alphabet Inc.        GOOGL      USD  NasdaqGS
     """
+    companyid: int
     marketcap: float
     pricingdate: str
     usdmarketcap: float

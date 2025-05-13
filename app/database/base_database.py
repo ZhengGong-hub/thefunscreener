@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Tuple, List
+from typing import Tuple, List
 from contextlib import contextmanager
 
 class BaseDatabase(ABC):

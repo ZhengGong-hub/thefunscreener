@@ -23,7 +23,7 @@ class TaskManagerRepository:
         """
         return self.database.query_all("SELECT * from ciqcompany limit 10;")
 
-    def query_global_market_cap(self, asofdate: str, mktcap_thres: int, country: str = "US", allow_fuzzy: bool = False) -> pd.DataFrame:
+    def query_global_market_cap(self, asofdate: str, mktcap_thres: float, country: str = "US", allow_fuzzy: bool = False) -> pd.DataFrame:
         """Query the global market cap that is above the threshold and at a given date.
 
         we do not really need the fuzzy, as the marketcap is pretty dense over vacations and holidays
@@ -42,7 +42,7 @@ class TaskManagerRepository:
             raise ValueError("asofdate must be a string")
 
         # Common SELECT fields and table joins for both scenarios
-        query = f"""
+        query = """
             SELECT 
                 ciqmarketcap.companyid,
                 ciqmarketcap.marketcap,
@@ -100,7 +100,7 @@ class TaskManagerRepository:
             ORDER BY
                 ciqmarketcap.pricingdate DESC, usdmarketcap DESC
         """
-        
+
         res = self.database.query_all(query)
         # convert to dataframe
         df = pd.DataFrame(res)

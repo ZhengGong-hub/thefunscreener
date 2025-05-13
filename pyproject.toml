@@ -20,8 +20,9 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "ruff>=0.1.0,<0.2.0",
+    "ruff>=0.2.0",
     "pytest>=7.0.0,<8.0.0",
+    "mypy>=1.15.0",
 ]
 
 [build-system]
@@ -36,20 +37,27 @@ pythonpath = ["."]
 testpaths = ["tests"]
 
 [tool.ruff]
-# Enable flake8-bugbear (`B`) rules.
-select = ["E", "F", "B", "I", "N", "UP", "ANN", "W", "C4", "T20"]
-ignore = ["ANN101", "B008", "E501", "ANN401"]
-
-# Same as Black.
 line-length = 88
+target-version = "py310"
+select = ["E", "F", "I", "N", "W", "B", "UP", "PL", "RUF"]
+ignore = ["E402","F405","F403","E501","I001", "UP007", "UP035", "UP006", "B017", "PLR2004", "PLR0912", "PLR0915", "W291", "W293"]
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
-[tool.ruff.mccabe]
-# Unlike Flake8, default to a complexity level of 10.
-max-complexity = 10
-
 [tool.ruff.isort]
 known-third-party = ["fastapi", "pydantic", "psycopg2", "requests", "uvicorn"]
 known-first-party = ["app", "database"] 
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+no_implicit_optional = false
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+warn_return_any = false
+warn_unused_ignores = false
+warn_unreachable = true
+show_error_codes = true
+follow_imports = "normal"
+disable_error_code = ["attr-defined", "index"]

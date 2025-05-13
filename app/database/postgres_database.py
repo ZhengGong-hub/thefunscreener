@@ -1,4 +1,4 @@
-from typing import Optional, Any, Tuple, List
+from typing import Tuple, List
 import psycopg2
 import pandas as pd
 from app.database.base_database import BaseDatabase

@@ -17,7 +17,7 @@ class Paths(BaseModel):
     base_dir: Path = Field(default_factory=lambda: Path(__file__).parent.parent.parent)
     # relative path
     data_output_dir: Path = Field(default_factory=lambda: Path("data_output"))
-    
+
     @property
     def full_input_dir(self) -> Path:
         """Get full path to input directory."""

@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from app.tasks.market_data_updater import MarketDataUpdater
 from app.models.company import CompanyCreate
@@ -41,7 +41,7 @@ def test_fetch_top_market_cap_companies():
     # The MarketDataUpdater._get_mock_data() method already provides test data
     # so we can just call the fetch method directly
     companies = MarketDataUpdater.fetch_top_market_cap_companies()
-    
+
     # Verify we have data
     assert len(companies) > 0
     assert "ticker" in companies[0]
@@ -55,18 +55,18 @@ def test_update_market_data(mock_fetch, mock_upsert, mock_company_data):
     """Test updating market data."""
     # Mock the fetch method to return our test data
     mock_fetch.return_value = mock_company_data
-    
+
     # Mock the upsert method to return the input data
     mock_upsert.side_effect = lambda x: x.dict()
-    
+
     # Call the update method
     count = MarketDataUpdater.update_market_data()
-    
+
     # Verify the results
     assert count == 3
     assert mock_fetch.call_count == 1
     assert mock_upsert.call_count == 3
-    
+
     # Verify the correct company objects were created
     calls = mock_upsert.call_args_list
     assert isinstance(calls[0][0][0], CompanyCreate)
@@ -80,12 +80,12 @@ def test_run_daily_update(mock_update):
     """Test running the daily update task."""
     # Mock the update method
     mock_update.return_value = 3
-    
+
     # Import here to avoid circular imports
     from app.tasks.market_data_updater import run_daily_update
-    
+
     # Run the daily update
     run_daily_update()
-    
+
     # Verify the update method was called
-    assert mock_update.call_count == 1 
+    assert mock_update.call_count == 1
